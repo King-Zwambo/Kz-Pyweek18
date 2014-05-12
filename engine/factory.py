@@ -3,6 +3,8 @@ import math
 import pygame
 from pygame.locals import *
 from sys import exit
+from .utilities.audio import *
+from .utilities.image import *
 
 try:
     import android
@@ -63,6 +65,9 @@ class Engine(object):
         self.touch = False
         self.clock = pygame.time.Clock()
         self.FPS = FPS
+        
+        self.audio  = Audio()
+        self.image  = Image()
 
     def clear(self):
         self.window.fill(self.black)
@@ -98,6 +103,28 @@ class Engine(object):
                 event.type == KEYDOWN and event.key == K_ESCAPE):
                 pygame.quit()
                 exit()
+
+    def get_sound(self, pathfile):
+        return self.audio.sound(pathfile)
+
+    def play_sound(self, sound):
+        self.audio.play(sound)
+
+    def get_music(self, pathfile):
+        self.audio.music(pathfile)
+        return None
+        
+    def play_music(self, music=None):
+        self.audio.loop()
+        
+    def get_image(self, name, pathfile, alpha=True):
+        self.image.load(name, pathfile, alpha)
+        self.image.scale(name, self.SW, self.SH)
+        return self.image.get_image(name)
+
+    def render_image(self, img, position=(0,0)):
+        self.window.blit(img, (position[0] * self.SW, position[1] * self.SH))
+
 
     
 
