@@ -5,6 +5,7 @@ from pygame.locals import *
 from sys import exit
 from .utilities.audio import *
 from .utilities.image import *
+from .utilities.strip import *
 
 try:
     import android
@@ -66,8 +67,9 @@ class Engine(object):
         self.clock = pygame.time.Clock()
         self.FPS = FPS
         
-        self.audio  = Audio()
-        self.image  = Image()
+        self.audio = Audio()
+        self.image = Image()
+        self.strip = Stripify()
 
     def clear(self):
         self.window.fill(self.black)
@@ -125,8 +127,26 @@ class Engine(object):
     def render_image(self, img, position=(0,0)):
         self.window.blit(img, (position[0] * self.SW, position[1] * self.SH))
 
+    def get_strip(self,
+                  name,
+                  pathfile,
+                  quantity,
+                  horizontal=True,
+                  alpha=True,
+                  seconds=0.75):
+        
+        self.strip.load(name,
+                        pathfile,
+                        quantity,
+                        horizontal,
+                        alpha,
+                        self.SW,
+                        self.SH)
+        
+        return Strip(self.window, self.strip.get_strip(name), seconds, self.FPS)
 
-    
+    def render_strip(self, strip, position=(0,0)):
+        strip.render((position[0] * self.SW, position[1] * self.SH))    
 
 
 
